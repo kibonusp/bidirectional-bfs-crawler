@@ -9,6 +9,7 @@ def get_largest_component(graph):
 
 N = 10000
 GWS = get_largest_component(nx.watts_strogatz_graph(N, 10, 0.05))
+adj_matrix = nx.adjacency_matrix(GWS).todense()
 '''
 adj_matrix = [
     [0, 1, 1, 0, 0, 0, 0, 0],
@@ -21,6 +22,10 @@ adj_matrix = [
     [0, 0, 0, 0, 1, 1, 0, 0]
 ]
 '''
+
+# ideia de utilização
+# criar uma página a partir de um grafo não direcionado de amigos
+# em que se eu sou amigo da pessoa, ela também é minha amiga
 
 # visitados específico da dfs
 def dfs_recursive(node, visitados, adj_list, conn_node):
@@ -67,8 +72,6 @@ def search(visitados_a, visitados_b, who, start_node, adj_matrix, stop, adj_list
                 visitados[i] = 0
                 if i in opposite_visitados:
                     stop.value = True
-        # time.sleep(1)
-    print(who, adj_list)
     
     commons = sorted(list({x:visitados[x] for x in visitados.keys() if x in opposite_visitados}.keys()))
     path_to_conn = dfs_recursive(start_node, set(), adj_list, commons[0])
@@ -96,7 +99,7 @@ if __name__ == '__main__':
                               visitados_b, 
                               'a', 
                               list(GWS.nodes)[0], 
-                              nx.adjacency_matrix(GWS).todense(), 
+                              adj_matrix, 
                               stop,
                               adj_list_a,
                               adj_list_b,
@@ -108,7 +111,7 @@ if __name__ == '__main__':
                               visitados_b, 
                               'b', 
                               list(GWS.nodes)[3720], 
-                              nx.adjacency_matrix(GWS).todense(), 
+                              adj_matrix, 
                               stop,
                               adj_list_a,
                               adj_list_b,
@@ -128,5 +131,5 @@ if __name__ == '__main__':
     route = route_a_list + route_b_list[1:]
     
     end = time.time()
-    print("Route:", route)
+    print("\n\n\nRoute:", route)
     print("Time elapsed: {:.2f}s".format(end-start))
